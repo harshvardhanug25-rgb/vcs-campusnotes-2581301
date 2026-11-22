@@ -19,6 +19,7 @@ git remote -v
 git branch -a
 git switch --track -c features/notes-list origin/features/notes-list
 git branch -vv
+git switch main
 
 # In a second folder:
 cd ..
@@ -29,8 +30,9 @@ git add README.md
 git commit -m "docs: record second clone workflow"
 git push origin main
 
-# Return to the original clone:
+# Return to the original clone (on main):
 cd ../campusnotes
+git switch main
 git pull origin main
 git log --oneline -5
 ```
