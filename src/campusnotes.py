@@ -3,34 +3,11 @@
 from __future__ import annotations
 
 import argparse
-import json
 from datetime import datetime, timezone
 from pathlib import Path
 from uuid import uuid4
 
-
-def default_store() -> Path:
-    """Return the per-user JSON store path."""
-    return Path.home() / ".campusnotes" / "notes.json"
-
-
-def load_notes(store: Path) -> list[dict]:
-    if not store.exists():
-        return []
-    with store.open("r", encoding="utf-8") as handle:
-        data = json.load(handle)
-    if not isinstance(data, list):
-        raise ValueError("The notes file must contain a JSON list.")
-    return data
-
-
-def save_notes(notes: list[dict], store: Path) -> None:
-    store.parent.mkdir(parents=True, exist_ok=True)
-    temporary = store.with_suffix(".tmp")
-    with temporary.open("w", encoding="utf-8") as handle:
-        json.dump(notes, handle, ensure_ascii=False, indent=2)
-        handle.write("\n")
-    temporary.replace(store)
+from src.storage import default_store, load_notes, save_notes
 
 
 def add_note(title: str, body: str, store: Path | None = None) -> dict:
@@ -56,6 +33,7 @@ def add_note(title: str, body: str, store: Path | None = None) -> dict:
 
 
 def find_notes(query: str, store: Path | None = None) -> list[dict]:
+    """Find notes whose title or body contains query, ignoring case."""
     notes = load_notes(store or default_store())
     term = query.casefold()
     return [
