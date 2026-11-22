@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+message_file="${1:?commit message file is required}"
+message="$(cat "$message_file")"
+
+if (( ${#message} < 10 )); then
+  echo "ERROR: commit message must contain at least 10 characters." >&2
+  exit 1
+fi
+
+if [[ ! "$message" =~ ^(feat|fix|docs|refactor|chore):[[:space:]].+ ]]; then
+  echo "ERROR: use feat:, fix:, docs:, refactor: or chore: followed by a description." >&2
+  exit 1
+fi

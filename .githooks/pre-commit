@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Inspect the staged snapshot rather than the working-tree copy.
+pattern="$(printf '%s|%s' 'TO''DO' 'FIX''ME')"
+
+while IFS= read -r -d '' file; do
+  if git show ":$file" | grep -nE "$pattern" >/dev/null; then
+    printf 'ERROR: staged file "%s" contains an unfinished-work marker. Commit rejected.\n' "$file" >&2
+    exit 1
+  fi
+done < <(git diff --cached --name-only --diff-filter=ACMR -z)
