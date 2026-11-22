@@ -1,0 +1,12 @@
+# Python bytecode and local environments
+__pycache__/
+*.py[cod]
+.venv/
+
+# Test and coverage output
+.coverage
+coverage.xml
+htmlcov/
+
+# Local databases
+*.sqlite3
