@@ -20,3 +20,9 @@ python -m src.campusnotes search scheduling
 - Shared Git hooks for staged unfinished-work markers and commit-message conventions.
 
 See [docs/USAGE.md](docs/USAGE.md) for installation, all commands, testing and contribution guidance.
+
+## Verify shared hooks after cloning
+
+Run `git config --local core.hooksPath .githooks` in each new clone.
+To check which directory this clone uses, run `git config --get core.hooksPath`.
+The expected output is `.githooks`.
