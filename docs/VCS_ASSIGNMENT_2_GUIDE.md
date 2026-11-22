@@ -57,7 +57,6 @@ After reviewing the history locally, create and push the required tags:
 
 ```bash
 git log --oneline -10
-git tag -a v0.1.0
 ```
 
 For the assignment, `v0.1.0` must be a lightweight tag, so use `git tag v0.1.0` (not `-a`) if it does not exist. Create the annotated release tag and push both:
