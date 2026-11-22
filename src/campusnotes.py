@@ -34,12 +34,20 @@ def save_notes(notes: list[dict], store: Path) -> None:
 
 
 def add_note(title: str, body: str, store: Path | None = None) -> dict:
+    """Save a note after validating that its title and body are not blank."""
+    clean_title = title.strip()
+    clean_body = body.strip()
+    if not clean_title:
+        raise ValueError("A note title cannot be empty.")
+    if not clean_body:
+        raise ValueError("A note body cannot be empty.")
+
     destination = store or default_store()
     notes = load_notes(destination)
     note = {
         "id": uuid4().hex[:8],
-        "title": title,
-        "body": body,
+        "title": clean_title,
+        "body": clean_body,
         "created_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
     }
     notes.append(note)
@@ -84,7 +92,10 @@ def main() -> int:
     store = default_store()
 
     if args.command == "add":
-        note = add_note(args.title, args.body, store)
+        try:
+            note = add_note(args.title, args.body, store)
+        except ValueError as error:
+            parser.error(str(error))
         print(f'Saved note {note["id"]}: {note["title"]}')
     elif args.command == "list":
         notes = load_notes(store)
